@@ -1,13 +1,21 @@
 ---
-# Admins' department email address
+# Admins' department email address (must be set)
 # admin_email: ""
+
+core_packages:
+- htop
+- vim
+- tree
+- git
+- wget
+- curl
 
 sshd_port: 22
 sshd_protocol: 2
+sshd_agent_forwarding: "yes"
+sshd_password_authentication: "no"
 sshd_listen_addresses:
-- 0.0.0.0
-- ::
-sshd_agent_forwarding: yes
+- "0.0.0.0"
 
 # sshd_host_keys:
 
@@ -15,13 +23,19 @@ sshd_agent_forwarding: yes
 # - without-password   ... allow login with ssh key
 # - no
 # - yes
-sshd_root_password: without-password
+sshd_root_password: "without-password"
 
 # (Dis)Allow password login to users
-sshd_password_authentication: no
+sshd_password_authentication: "no"
 
 # Logout inactive user after this limit in seconds (default is 10hours)
 sshd_client_alive_interval: 36000
+
+# hardening_os option includes sysctl settings and more restricted permissions
+hardening_os: true
+
+# Disable IPv6 protocol in kernel
+disable_ipv6: true
 
 # Autoupdates
 autoupdate_enable: true

@@ -1,11 +1,11 @@
 ---
-- name: Set fqdn
+- name: "Set fqdn {{ inventory_hostname }}"
   hostname:
     name: "{{ inventory_hostname }}"
   ignore_errors: yes
   register: hostname_change
 
-- name: Re-gather facts because hostname update
+- name: Re-gather facts because hostname has been updated
   action: setup
   when: hostname_change.changed == "true" and hostname_change.failed == "false"
 
@@ -20,15 +20,13 @@
   apt:
     update_cache: yes
 
-- name: Install core tools
+- name: Manage sshd
+  include: sshd.yml
+
+- name: Install core packages
   apt:
     state: present
-    name: "{{ item }}"
-  with_items:
-  - vim
-  - tree
-  - htop
-  - git
+    name: "{{ core_packages }}"
 
 - name: Debian security patches
   apt:
@@ -37,8 +35,8 @@
 
 - name: Configure security updates
   template:
-    src: "33-security-updates.j2"
-    dest: "/etc/apt/apt.conf.d/{{ item }}"
+    src: 33-security-updates.j2
+    dest: /etc/apt/apt.conf.d/33-security-updates.j2
     owner: root
     group: root
     mode: 0644
@@ -80,9 +78,6 @@
     src: vimrc
     dest: /etc/vim/virc
     owner: root
-
-- name: Manage sshd
-  include: sshd.yml
 
 - name: OS permissions hardening
   include: perms.yml

@@ -20,9 +20,11 @@ Unattended-Upgrade::Allowed-Origins {
         "${distro_id} ${distro_codename}-security";
 };
 
+{% if security_autoupdate_blacklist is defined %}
 Unattended-Upgrade::Package-Blacklist{
 {% for pkg in security_autoupdate_blacklist %}
       "{{pkg}}";
 {% endfor %}
 }
+{% endif %}
 
