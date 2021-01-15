@@ -1,0 +1,12 @@
+galaxy_info:
+  author: Marek Sirovy
+  description: Basic server configuration
+  company: Marek Sirovy
+  license: BSD
+
+  min_ansible_version: 2.9
+
+  galaxy_tags: []
+
+dependencies: []
+  # DON'T USE THIS !!!!

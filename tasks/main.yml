@@ -1,0 +1,68 @@
+---
+- name: Configure apt to minimize amount of instaled packages
+  copy:
+    src: debian-minimal
+    dest: /etc/apt/apt.conf.d/00_only_required_packages
+    mode: 0644
+    owner: root
+
+- name: Update cache
+  apt:
+    update_cache: yes
+
+- name: Install core tools
+  apt:
+    state: present
+    name: "{{ item }}"
+  with_items:
+  - vim
+  - htop
+  - git
+
+- name: Configure bash
+  copy:
+    src: 00-custom_bash.sh
+    dest: /etc/profile.d/00-custom_bash.sh
+    mode: 0755
+    owner: root
+
+- name: Clean etc skel
+  file:
+    path: /etc/skel/.bashrc
+    state: absent
+  
+
+- name: Copy vimrc configuration
+  copy:
+    src: vimrc
+    dest: /etc/vim/vimrc
+    owner: root
+
+- name: Copy virc configuration
+  copy:
+    src: vimrc
+    dest: /etc/vim/virc
+    owner: root
+
+- name: Configure logrotate
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/logrotate.d/{{ item }}"
+    owner: root
+    mode: 0644
+  with_items:
+  - rotate_history.conf
+
+- name: Configure rsyslog
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/rsyslog.d/{{ item }}"
+    owner: root
+    mode: 0644
+  with_items:
+  - log_history.conf
+
+- name: Reload rsyslog
+  systemd:
+    service: rsyslog
+    state: restarted 
