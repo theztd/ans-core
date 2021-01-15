@@ -12,3 +12,9 @@
     state: reloaded
     enabled: yes
 
+- name: Manage root's ssh keys
+  authorized_key:
+    key: "{{ item }}"
+    state: present
+    user: root
+  with_file: "{{ root_keys }}"

@@ -1,6 +1,9 @@
 ---
 # Admins' department email address (must be set)
 # admin_email: ""
+root_keys:
+- keys/marek
+- keys/github
 
 core_packages:
 - htop

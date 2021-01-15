@@ -28,7 +28,9 @@ ChallengeResponseAuthentication no
 
 UsePAM yes
 StrictModes yes
-AllowAgentForwarding {{ sshd_agent_forwarding }}
+UseDNS no   # speedup login
+AcceptEnv LANG LC_*
+PrintMotd no
 
 # Don't need rhost compatibility
 IgnoreRhosts yes
@@ -41,8 +43,5 @@ MaxSessions 30
 MaxStartups 30
 
 X11Forwarding no
-#UsePrivilegeSeparation sandbox	
-
-UseDNS no   # speedup login
-
-AcceptEnv LANG LC_*
+AllowAgentForwarding {{ sshd_agent_forwarding }}
+#UsePrivilegeSeparation sandbox
