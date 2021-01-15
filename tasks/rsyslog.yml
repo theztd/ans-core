@@ -1,0 +1,23 @@
+---
+- name: Configure logrotate
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/logrotate.d/{{ item }}"
+    owner: root
+    mode: 0644
+  with_items:
+  - rotate_history.conf
+
+- name: Configure rsyslog
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/rsyslog.d/{{ item }}"
+    owner: root
+    mode: 0644
+  with_items:
+  - log_history.conf
+
+- name: Reload rsyslog
+  systemd:
+    service: rsyslog
+    state: restarted 

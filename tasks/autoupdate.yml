@@ -1,0 +1,13 @@
+---
+- name: security patches
+  apt:
+    name: unattended-upgrades
+    state: present
+
+- name: Configure security updates
+  template:
+    src: 33-security-updates.j2
+    dest: /etc/apt/apt.conf.d/33-security-updates.j2
+    owner: root
+    group: root
+    mode: 0644
