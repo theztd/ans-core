@@ -1,0 +1,28 @@
+# Managed by ansible core role
+
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Download-Upgradeable-Packages "1";
+APT::Periodic::AutocleanInterval "7";
+APT::Periodic::Unattended-Upgrade "1";
+
+# Allow service reboots to autoupdate 
+Unattended-Upgrade::Automatic-Reboot "{{ autoupdate_reboot }}";
+Unattended-Upgrade::Automatic-Reboot-Time "{{ autoupdate_reboot_time }}";
+
+# Send notifications on admin email
+{% if admin_email %}
+Unattended-Upgrade::Mail "{{ admin_email }}";
+Unattended-Upgrade::MailOnlyOnError "true";
+{% endif %}
+
+# Only security patches are allowed
+Unattended-Upgrade::Allowed-Origins {
+        "${distro_id} ${distro_codename}-security";
+};
+
+Unattended-Upgrade::Package-Blacklist{
+{% for pkg in security_autoupdate_blacklist %}
+      "{{pkg}}";
+{% endfor %}
+}
+

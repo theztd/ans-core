@@ -1,0 +1,24 @@
+- name: Strong permissions on /etc
+  file:
+    path: /etc
+    mode: 0711
+    state: touch
+
+- name: Strong permissions on /home
+  file:
+    path: /home
+    mode: 0711
+    state: touch
+
+- name: Strong permissions on /usr
+  file:
+    path: /usr
+    mode: 0711
+    state: touch
+
+- name: Strong permissions on /var
+  file:
+    path: /var
+    mode: 0711
+    state: touch
+

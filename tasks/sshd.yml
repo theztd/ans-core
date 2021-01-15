@@ -1,0 +1,13 @@
+- name: Reconfigure sshd
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    mode: 0640
+    validate: 'sshd -T -f %s'
+
+- name: Configure sshd service
+  systemd:
+    name: sshd
+    state: reloaded
+    enabled: yes
+

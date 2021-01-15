@@ -1,2 +1,32 @@
 ---
-# defaults file for core
+# Admins' department email address
+# admin_email: ""
+
+sshd_port: 22
+sshd_protocol: 2
+sshd_listen_addresses:
+- 0.0.0.0
+- ::
+sshd_agent_forwarding: yes
+
+# sshd_host_keys:
+
+# Permit login as root, options are:
+# - without-password   ... allow login with ssh key
+# - no
+# - yes
+sshd_root_password: without-password
+
+# (Dis)Allow password login to users
+sshd_password_authentication: no
+
+# Logout inactive user after this limit in seconds (default is 10hours)
+sshd_client_alive_interval: 36000
+
+# Autoupdates
+autoupdate_enable: true
+autoupdate_reboot: "false"
+autoupdate_reboot_time: "01:00"
+# security_autoupdate_blacklist:
+# - mariadb-server
+

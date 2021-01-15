@@ -1,0 +1,4 @@
+# ansible managed (core/hardening.yml)
+
+alias net-pf-10 off
+alias ipv6 off

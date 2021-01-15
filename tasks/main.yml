@@ -1,4 +1,14 @@
 ---
+- name: Set fqdn
+  hostname:
+    name: "{{ inventory_hostname }}"
+  ignore_errors: yes
+  register: hostname_change
+
+- name: Re-gather facts because hostname update
+  action: setup
+  when: hostname_change.changed == "true" and hostname_change.failed == "false"
+
 - name: Configure apt to minimize amount of instaled packages
   copy:
     src: debian-minimal
@@ -16,8 +26,36 @@
     name: "{{ item }}"
   with_items:
   - vim
+  - tree
   - htop
   - git
+
+- name: Debian security patches
+  apt:
+    name: unattended-upgrades
+    state: present
+
+- name: Configure security updates
+  template:
+    src: "33-security-updates.j2"
+    dest: "/etc/apt/apt.conf.d/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Disable IPv6
+  copy:
+    src: noIPv6
+    dest: /etc/modprobe.d/noIPv6
+    mode: 0640
+  when: disable_ipv6 == "true"
+
+- name: Sysctl hardening
+  template:
+    src: sysctl.conf
+    dest: /etc/sysctl.d/hardening.conf
+    mode: 0640
+  when: hardening_os == "true"
 
 - name: Configure bash
   copy:
@@ -30,7 +68,6 @@
   file:
     path: /etc/skel/.bashrc
     state: absent
-  
 
 - name: Copy vimrc configuration
   copy:
@@ -43,6 +80,13 @@
     src: vimrc
     dest: /etc/vim/virc
     owner: root
+
+- name: Manage sshd
+  include: sshd.yml
+
+- name: OS permissions hardening
+  include: perms.yml
+  when: hardening_os == "true"
 
 - name: Configure logrotate
   copy:

@@ -1,0 +1,59 @@
+# If you want to change the port on a SELinux system, you have to tell
+# SELinux about this change.
+# semanage port -a -t ssh_port_t -p tcp #PORTNUMBER
+
+Port {{ sshd_port }}
+Protocol {{ sshd_protocol}}
+
+{% if sshd_listen_addresses is defined -%}
+{% for hk in sshd_listen_addresses -%}
+ListenAddress {{ ladr }}
+{%- endfor %}
+{%- endif %}
+
+
+{% if sshd_host_keys is defined %}
+{% for hk in sshd_host_keys %}
+HostKey {{ hk }}
+{% endfor %}
+{% endif %}
+
+# Logging
+SyslogFacility AUTHPRIV
+LogLevel VERBOSE
+
+# Authentication:
+PermitRootLogin {{ sshd_root_password }}
+PasswordAuthentication {{ sshd_password_authentication }}
+PermitEmptyPasswords no
+ChallengeResponseAuthentication no
+
+UsePAM yes
+StrictModes yes
+AllowAgentForwarding {{ sshd_agent_forwarding }}
+
+# Don't need rhost compatibility
+IgnoreRhosts yes
+
+# Kick off idle users
+ClientAliveInterval {{ sshd_client_alive_interval }}
+ClientAliveCountMax 0
+
+MaxSessions 30
+MaxStartups 30
+
+X11Forwarding no
+UsePrivilegeSeparation sandbox		# Default for new installations.
+
+UseDNS no   # speedup login
+
+AcceptEnv LANG LC_*
+
+
+Subsystem sftp internal-sftp
+
+Match Group sftp-only
+	ChrootDirectory /home
+	ForceCommand internal-sftp
+	X11Forwarding no
+	AllowTcpForwarding no
