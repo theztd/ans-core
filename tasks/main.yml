@@ -1,7 +1,7 @@
 ---
-- name: "Set fqdn {{ inventory_hostname }}"
+- name: "Set fqdn {{ fqdn | default(inventory_hostname) }}"
   hostname:
-    name: "{{ inventory_hostname }}"
+    name: "{{ fqdn | default(inventory_hostname) }}"
   ignore_errors: yes
   register: hostname_change
 
