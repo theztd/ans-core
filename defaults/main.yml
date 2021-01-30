@@ -13,6 +13,15 @@ core_packages:
 - wget
 - curl
 
+# For description let's see man pages
+# resolv:
+#   nameservers:
+#   - 8.8.8.8
+#   search: dev.check-this.link
+#   options:
+#   - timeout:1 
+#   - retries:1
+
 sshd_port: 22
 sshd_protocol: 2
 sshd_agent_forwarding: "yes"

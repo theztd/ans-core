@@ -21,17 +21,8 @@
   include: autoupdate.yml
   when: autoupdate_enable == "true"
 
-- name: Update cache
-  apt:
-    update_cache: yes
-
 - name: Manage sshd
   include: sshd.yml
-
-- name: Install core packages
-  apt:
-    state: present
-    name: "{{ core_packages }}"
 
 - name: Disable IPv6
   copy:
@@ -44,7 +35,7 @@
   template:
     src: resolv.conf
     dest: /etc/resolv.conf
-    mode: 0640
+    mode: 0444
 
 - name: Configure bash
   copy:
@@ -69,6 +60,15 @@
 
 - name: Rsyslog
   include: rsyslog.yml
+
+- name: Update cache
+  apt:
+    update_cache: yes
+
+- name: Install core packages
+  apt:
+    state: present
+    name: "{{ core_packages }}"
 
 - name: OS filesystem hardening
   include: perms.yml
