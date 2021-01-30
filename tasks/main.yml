@@ -40,6 +40,12 @@
     mode: 0640
   when: disable_ipv6 == "true"
 
+- name: Configure resolv.conf
+  template:
+    src: resolv.conf
+    dest: /etc/resolv.conf
+    mode: 0640
+
 - name: Configure bash
   copy:
     src: 00-custom_bash.sh
