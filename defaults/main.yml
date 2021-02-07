@@ -22,6 +22,18 @@ core_packages:
 #   - timeout:1 
 #   - retries:1
 
+networking:
+  # whether co cleanup /etc/network/interfaces file
+  clean_default: false
+  # Generates /etc/network/interfaces.d/$name
+  interfaces:
+  - name: ens7
+    method: static
+    address: 10.1.1.11
+    netmask: 255.255.255.0
+    gateway: 10.1.1.1
+    mtu: 1450
+
 sshd_port: 22
 sshd_protocol: 2
 sshd_agent_forwarding: "yes"

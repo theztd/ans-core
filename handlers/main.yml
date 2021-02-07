@@ -1,2 +1,7 @@
 ---
 # handlers file for core
+- name: restart_networking
+  systemd:
+    name: networking
+    status: reloaded
+
