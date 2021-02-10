@@ -31,20 +31,22 @@
     mode: 0640
   when: disable_ipv6 == "true"
 
-- name: Configure internal ip
-  template:
-    src: iface.j2
-    dest: "/etc/network/interfaces.d/{{ internal_if }}"
-    mode: 0644
-  when: internal_ip is defined and internal_if is defined
-  notify: restart_networking
-
 - name: Advanced networking
   lineinfile:
     line: "source /etc/network/interfaces.d/*"
     path: "/etc/network/interfaces"
     state: present
 
+- name: Configure internal ip
+  template:
+    src: iface.j2
+    dest: "/etc/network/interfaces.d/{{ internal_if }}"
+    mode: 0644
+  when: internal_ip is defined and internal_if is defined
+
+- name: "Turn interface {{ internal_if }} up"
+  command: "ifup {{ internal_if }}"
+  when: internal_if is defined
 
 - name: Configure resolv.conf
   template:
@@ -52,6 +54,12 @@
     dest: /etc/resolv.conf
     mode: 0444
   when: resolv is defined
+
+- name: Configure internal DNS via hosts
+  blockinfile:
+    dest: /etc/hosts
+    content: "{{ lookup('template', 'hosts.j2') }}"
+    state: present
 
 - name: Configure bash
   copy:

@@ -1,0 +1,4 @@
+{% for item in ansible_play_batch %}
+{% set short_name = item.split('.') %}
+{{ internal_ip | default(hostvars[item].ansible_ssh_host) }}       {{ item }} {{ short_name[0] }}
+{% endfor %}
