@@ -11,6 +11,7 @@ core_packages:
 - tree
 - git
 - wget
+- unzip
 - curl
 
 # For description let's see man pages
