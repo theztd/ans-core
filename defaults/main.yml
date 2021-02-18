@@ -9,6 +9,7 @@ core_packages:
 - htop
 - vim
 - tree
+- rsync
 - git
 - wget
 - unzip
