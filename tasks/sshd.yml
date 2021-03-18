@@ -13,8 +13,18 @@
     enabled: yes
 
 - name: Manage root's ssh keys
-  authorized_key:
-    key: "{{ item }}"
-    state: present
-    user: root
-  with_file: "{{ root_keys }}"
+  block:
+  - set_fact:
+      root_key_list: "{{ lookup('file', item) }}"
+    with_items: "{{ root_keys }}"
+    register: root_key_list
+  - set_fact:
+      root_key_string: "{{ root_key_list.results | map(attribute='ansible_facts.root_key_list') | list | join('\n') }}"
+  - authorized_key:
+      key: "{{ root_key_string }}"
+      state: present
+      user: root
+      # exclusive: yes
+  tags:
+  - ssh_keys
+
