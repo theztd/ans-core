@@ -24,7 +24,7 @@
       key: "{{ root_key_string }}"
       state: present
       user: root
-      # exclusive: yes
+      exclusive: yes
   tags:
   - ssh_keys
 
