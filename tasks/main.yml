@@ -48,11 +48,8 @@
   command: "ifup {{ internal_if }}"
   when: internal_if is defined
 
-- name: Configure resolv.conf
-  template:
-    src: resolv.conf
-    dest: /etc/resolv.conf
-    mode: 0444
+- name: Configure resolv
+  include: resolv.yml
   when: resolv is defined
 
 - name: Configure internal DNS via hosts
