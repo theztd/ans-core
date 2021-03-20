@@ -1,0 +1,37 @@
+---
+- name: Check dynamic resolv conf
+  stat:
+    path: /etc/resolvconf/resolv.conf.d/head
+  register: resolvconf_dynamic
+  tags:
+  - resolv
+
+- debug:
+    msg: "{{ resolvconf_dynamic }}"
+  tags: resolv
+    
+
+- name: Configure dynamic resolvconf
+  block:
+  - name: Generate /etc/resolvconf/resolv.conf.d/head
+    template:
+      src: resolv.conf
+      dest: /etc/resolvconf/resolv.conf.d/head
+      mode: 0444
+  - name: Update resolvconf
+    command: resolvconf -u
+      
+  when: resolvconf_dynamic.stat.exists
+  tags:
+  - resolv
+
+- name: Configure resolv.conf
+  template:
+    src: resolv.conf
+    dest: /etc/resolv.conf
+    mode: 0444
+  when: not resolvconf_dynamic.stat.exists
+  tags:
+  - resolv
+
+
