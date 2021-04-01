@@ -17,11 +17,11 @@
   - set_fact:
       root_key_list: "{{ lookup('file', item) }}"
     with_items: "{{ root_keys }}"
-    register: root_key_list
+    register: root_key_list_out
   - set_fact:
-      root_key_string: "{{ root_key_list.results | map(attribute='ansible_facts.root_key_list') | list | join('\n') }}"
+      root_keys_string: "{{ root_key_list_out.results | map(attribute='ansible_facts.root_key_list') | list | join('\n') }}"
   - authorized_key:
-      key: "{{ root_key_string }}"
+      key: "{{ root_keys_string }}"
       state: present
       user: root
       exclusive: yes
