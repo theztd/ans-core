@@ -52,11 +52,12 @@
   include: resolv.yml
   when: resolv is defined
 
-- name: Configure internal DNS via hosts
+- name: Configure internal DNS via hosts (skip when limit is set)
   blockinfile:
     dest: /etc/hosts
     content: "{{ lookup('template', 'hosts.j2') }}"
     state: present
+  when: ansible_limit is not defined
 
 - name: Configure bash
   copy:
