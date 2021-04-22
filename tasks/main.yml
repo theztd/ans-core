@@ -58,6 +58,8 @@
     content: "{{ lookup('template', 'hosts.j2') }}"
     state: present
   when: ansible_limit is not defined
+  tags:
+  - hosts
 
 - name: Configure bash
   copy:
