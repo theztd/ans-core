@@ -36,7 +36,8 @@ networking:
     gateway: 10.1.1.1
     mtu: 1450
 
-sshd_port: 22
+sshd_ports:
+- 22
 sshd_protocol: 2
 sshd_agent_forwarding: "yes"
 sshd_password_authentication: "no"

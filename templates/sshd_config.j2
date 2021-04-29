@@ -1,6 +1,9 @@
 # Managed by ansible core role
 
+{% for sshd_port in sshd_ports %}
 Port {{ sshd_port }}
+{% endfor %}
+
 Protocol {{ sshd_protocol}}
 
 {% if sshd_listen_addresses is defined -%}
